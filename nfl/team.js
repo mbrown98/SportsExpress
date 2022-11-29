@@ -5,8 +5,8 @@ const BASE = "https://www.pro-football-reference.com"
 
 export async function testScrape(team, year) {
     const URL = `https://www.pro-football-reference.com/teams/${team}/${year}_roster.htm`
-    const response = await got(URL)
-    const $ = cheerio.load(response.body);
+
+    const $ = await fetchAndParseHTML(URL)
 
     const squad = {}
 
@@ -21,6 +21,22 @@ export async function testScrape(team, year) {
         squad[player.player] = player
 
     })
-
     return squad
+}
+
+const fetchAndParseHTML = async (url) => {
+    try {
+        console.log({url})
+        const response = await got(url)
+        return cheerio.load(response.body)
+    } catch (error) {
+        return null
+    }
+}
+
+export async function getFullPlayerData(ext) {
+    const $ = await fetchAndParseHTML(BASE + ext)
+    const player = {}
+    player.img = $("#meta > div.media-item > img").attr("src")
+    return player
 }
