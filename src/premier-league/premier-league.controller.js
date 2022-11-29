@@ -1,19 +1,21 @@
 import puppeteer from 'puppeteer'
 
-export const getMatchInfo = async (matchID) => {
+async function getMatchInfo(req, res) {
+  const { matchID } = req.body
   const BASE = 'https://www.premierleague.com/match/'
   try {
     const { browser, page } = await UTILS.launchBrowserAndPage()
     await page.goto(BASE + matchID)
     const data = await UTILS.getFixtureData(page)
     await browser.close()
-    return data
+    res.json(data)
   } catch (error) {
-    return { error: error.message }
+    res.json({ error: error.message })
   }
 }
 
-export const getPlayerInfo = async (playerID) => {
+async function getPlayerInfo(req, res) {
+  const { playerID } = req.body
   const BASE = 'https://www.premierleague.com/players/'
   try {
     const { browser, page } = await UTILS.launchBrowserAndPage()
@@ -21,9 +23,9 @@ export const getPlayerInfo = async (playerID) => {
     await page.goto(BASE + playerID)
     const data = await UTILS.getPlayerData(page)
     browser.close()
-    return data
+    res.json(data)
   } catch (error) {
-    return { error: error.message }
+    res.json({ error: error.message })
   }
 }
 
@@ -70,3 +72,5 @@ const STRINGS = {
   getPlayerName: `document.querySelector(".playerDetails .name").innerText`,
   getPlayerNumber: `document.querySelector(".playerDetails .number").innerText`,
 }
+
+export { getMatchInfo, getPlayerInfo }
