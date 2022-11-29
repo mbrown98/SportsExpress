@@ -1,9 +1,9 @@
 import express from 'express'
-import { getMatchInfo, getPlayerInfo } from './premier-league.controller.js'
+import controller from './premier-league.controller'
 
 const premierLeagueRouter = express.Router()
 
-premierLeagueRouter.get('/match', getMatchInfo)
-premierLeagueRouter.get('/player', getPlayerInfo)
+premierLeagueRouter.get('/match', controller.getMatchInfo)
+premierLeagueRouter.get('/player', controller.getPlayerInfo)
 
 export default premierLeagueRouter
